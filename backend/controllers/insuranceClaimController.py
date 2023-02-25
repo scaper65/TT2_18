@@ -49,9 +49,10 @@ def deleteClaim(claimId):
         db.session.commit()
 
         return jsonify({
-            "data": f"Claim of id {ClaimID} has been successfully deleted"
+            "data": f"Claim of id {claimId} has been successfully deleted"
         })
-    except:
+    except Exception as e:
         return jsonify({
-            "data": "Server error"
+            "data": "Server error",
+            "error":str(e)
         }), 500
