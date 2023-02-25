@@ -9,6 +9,7 @@ const GET_CLAIM_API_URL = hosturl+"/insuranceclaim/getall";
 const GET_POLICY_API_URL = hosturl+"/insurancepolicy/getall";
 
 
+
 const CreateClaim = (props) => {
     const auth = useAuth()
     // let navigate = useNavigate();
@@ -17,7 +18,7 @@ const CreateClaim = (props) => {
     const [receiptNo, setReceiptNo] = useState("");
     const [expenseDate, setExpenseDate] = useState("");
     const [amount, setAmount] = useState("");
-    const [purpose, setPurpose] = useState("");
+    const [purpose, setPurpose] = useState("")
     const [isFollowUp, setIsFollowUp] = useState(false);
     const [prevClaimId, setPrevClaimId] = useState("");
     const [insuranceId, setInsuranceId] = useState("");
@@ -87,6 +88,7 @@ const CreateClaim = (props) => {
 
 
     const [prevClaimOptions,setPrevClaimOptions] = useState(options);
+
 
 
     const handleOk = (e) => {
