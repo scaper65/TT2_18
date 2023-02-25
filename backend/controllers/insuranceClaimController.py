@@ -78,9 +78,10 @@ def editClaim():
 
         previousClaimID = request.json.get("Purpose", None)
        
-    
+        now = datetime.now()    
+        now = now.strftime('%Y-%m-%d %H:%M:%S')
         
-        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update({'FirstName':firstName,'LastName':lastName,'ExpenseDate':expenseDate,'Amount':amount,'Purpose':purpose,'FollowUp':followUp,'PreviousClaimID':previousClaimID})
+        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update({'FirstName':firstName,'LastName':lastName,'ExpenseDate':expenseDate,'Amount':amount,'Purpose':purpose,'FollowUp':followUp,'PreviousClaimID':previousClaimID,'LastEditedClaimDate' : str(now)})
 
     
         db.session.commit()
