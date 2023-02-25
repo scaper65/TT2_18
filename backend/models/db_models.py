@@ -34,6 +34,9 @@ class InsurancePolicy(db.Model):
     RemainingClaimLimit = db.Column(db.Float, nullable=False)
 
     User = db.relationship('User', primaryjoin='InsurancePolicy.EmployeeID == User.EmployeeID', backref='insurance_policies')
+    def json(self):
+        return {"InsuranceID": self.InsuranceID, "EmployeeID": self.EmployeeID, "InsuranceType": self.InsuranceType
+        , "PolicyStartDate": self.PolicyStartDate, "PolicyEndDate": self.PolicyEndDate, "RemainingClaimLimit": self.RemainingClaimLimit}
 
 
 
