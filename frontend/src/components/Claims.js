@@ -5,9 +5,23 @@ import axios from "axios";
 import { useAuth } from "../contexts/authContext"; 
 import hosturl from "../hosturl.js" 
 import { useEffect } from 'react';
-const API_URL = hosturl + "/insuranceClaim/delete/";
+import EditClaim from "./EditClaim";
+const API_URL = hosturl + "/insuranceClaim/";
 
 const Claims = (props) => {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [record, setRecord] = useState({});
+    
+    const handleEdit = (record) => {
+        setRecord(record);
+        setIsEditModalOpen(true);
+    }
+
+    const updateClaims = (updatedClaims) => {
+        // Update the claims in your app state or database
+        // This is just an example and will depend on how you're managing state
+        props.setClaims(updatedClaims);
+    }
     const auth = useAuth(); 
     const [ claims, setClaims ] = useState(props.claims);
     useEffect(() => { 
@@ -20,7 +34,7 @@ const Claims = (props) => {
         // Call a function to update the claims in your app state or database 
 
         axios({ 
-            method: 'delete', 
+            method: 'DELETE', 
             url: API_URL+record.ClaimID}); 
         setClaims(updatedClaims);
         console.log('Delete claim:', record); 
@@ -88,7 +102,7 @@ const Claims = (props) => {
             render: (text, record) => (
                 <>
                     {record.Status !== "Approved" ? (
-                        <Button type="primary">
+                        <Button type="primary" onClick={() => handleEdit(record)}>
                             Edit
                         </Button>
                     ) : null}
@@ -104,7 +118,10 @@ const Claims = (props) => {
 
 
     return (
-        <Table columns={columns} dataSource={claims} rowKey="ClaimID"/>
+        <div style={{ marginTop: '50px' }}>
+            <Table columns={columns} dataSource={props.claims} rowKey="ClaimID" />
+            <EditClaim isModalOpen={isEditModalOpen} onCancel={() => setIsEditModalOpen(false)} record={record} />        
+        </div>
     );
 };
 
