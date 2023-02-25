@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 // import ExchangeRateService from "../services/exchangeRate.service";
 import axios from "axios";
 import hosturl from "../hosturl.js"
 import { useAuth } from "../contexts/authContext.js";
 import Claims from '../components/Claims';
+import { FloatButton } from 'antd';
+import CreateClaim from "../components/CreateClaim.js";
+
 const Home = () => {
     const auth = useAuth(); 
+    const [isModalOpen, setIsModalOpen] = useState(false);
       // get request
     
 
@@ -281,10 +285,21 @@ const Home = () => {
          "LastEditedClaimDate": "2023-03-11T00:00:00+08:00"
         }
     ]
+    const onModalCancel = (e) => {
+        setIsModalOpen(false)
+    }
 
     return (
         <>
             <div className="container">
+                <FloatButton
+                    shape="circle"
+                    type="primary"
+                    style={{ right: 94 }}
+                    // icon={<CustomerServiceOutlined />}
+                    onClick = {() => setIsModalOpen(true)}
+                />
+                <CreateClaim isModalOpen={isModalOpen} onCancel={onModalCancel}/>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-container">
