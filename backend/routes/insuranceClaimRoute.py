@@ -17,6 +17,6 @@ insuranceClaimRoute.route('/add', strict_slashes=False,
 insuranceClaimRoute.route('/edit', strict_slashes=False,
                 methods=['PUT'])(editClaim)
 
-insuranceClaimRoute.route('delete/<int:claimId>', strict_slashes=False,methods=['DELETE'])(deleteClaim)
+insuranceClaimRoute.route('/<int:claimId>', strict_slashes=False,methods=['DELETE'])(deleteClaim)
 
 
