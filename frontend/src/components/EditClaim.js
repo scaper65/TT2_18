@@ -73,7 +73,7 @@ const CreateClaim = (props) => {
 
         axios({
             method: 'get',
-            url: GET_CLAIM_API_URL + record.ClaimID,
+            url: GET_CLAIM_API_URL + props.record.ClaimID,
             responseType: 'json',
             headers: config.headers
         })

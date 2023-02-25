@@ -2,6 +2,9 @@ import React from 'react';
 import { Table, Button } from 'antd'
 
 const Claims = (props) => {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [record, setRecord] = useState({});
+
     const handleDelete = (record) => {
         // Create a new array of claims excluding the one to be deleted
         const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID);
@@ -9,6 +12,11 @@ const Claims = (props) => {
         updateClaims(updatedClaims);
         console.log('Delete claim:', record);
     };
+
+    const handleEdit = (record) => {
+        setRecord(record);
+        setIsEditModalOpen(true);
+    }
 
     const updateClaims = (updatedClaims) => {
         // Update the claims in your app state or database
@@ -78,7 +86,7 @@ const Claims = (props) => {
             render: (text, record) => (
                 <>
                     {record.Status !== "Approved" ? (
-                        <Button type="primary">
+                        <Button type="primary" onClick={() => handleEdit(record)}>
                             Edit
                         </Button>
                     ) : null}
@@ -94,7 +102,10 @@ const Claims = (props) => {
 
 
     return (
-        <Table columns={columns} dataSource={props.claims} rowKey="ClaimID" />
+        <>
+            <Table columns={columns} dataSource={props.claims} rowKey="ClaimID" />
+            <EditClaim isModalOpen={isEditModalOpen} onCancel={() => setIsEditModalOpen(false)} record={record} />        
+        </>
     );
 };
 
