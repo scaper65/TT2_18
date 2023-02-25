@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DbsLogo from "../assets/DBS-Bank-logo.png";
 import { useAuth } from "../contexts/authContext";
 import { Button, Space, Input, Form } from 'antd';
+import CryptoJS from 'crypto-js';
 
 const Login = () => {
     let navigate = useNavigate();
@@ -12,8 +13,8 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-    const [errorUsername, setErrorUsername] = useState("")
-    const [errorPassword, setErrorPassword] = useState("")
+
+    const secretPass = "1etILrVdx5rCiqzNJfDDV8f3sGsaYwOq";
 
     const onChangeUsername = (e) => {
         const username = e.target.value;
@@ -22,31 +23,36 @@ const Login = () => {
 
     const onChangePassword = (e) => {
         const password = e.target.value;
-        console.log('password: ', password);
-
         setPassword(password);
     };
 
     const handleLogin = (values) => {
 
         // e.preventDefault();
-        console.log(values);
         setUsername(values.username)
-        setPassword(values.password)
+/*
+        const password = values.password;
+        const iv = CryptoJS.lib.WordArray.random(16);                         // Generate a random 16 bytes IV
+        console.log('iv: ', iv);
+        const key = CryptoJS.enc.Base64.parse('aR1h7EefwlPNVkvTHwfs6w==');    // Interpret key as Base64 encoded
+        console.log('key: ', key );
 
-        /*
-        if (!isNaN(username)) {
-            alert('Username should be all digits.')
-        }
+        const encrypted = CryptoJS.AES.encrypt(password, key, { iv: iv });      // Use CBC-mode and PKCS7-padding
+        const joinedData = iv.clone().concat(encrypted.ciphertext);           // Concat IV and Ciphertext    
+        const joinedDataB64 = CryptoJS.enc.Base64.stringify(joinedData);
+        console.log(joinedDataB64.replace(/(.{64})/g, "$1\n"));
 
-        if (username.length != 8 && password.length != 8) {
-            alert(`Username should be 8 characters. Password should be at least 8 characters.`)
-        } else if (username.length != 8) {
-            alert('Username should be 8 characters and should be all digits.')
-        } else if (password.length != 8) {
-            alert('Password should be 8 characters.')
-        }
+        // const encryptedPassword = CryptoJS.enc.Utf8.parse(
+        //     JSON.stringify(values.password),
+        //     secretPass
+        // ).toString();
+
+        setPassword(joinedDataB64)
+        console.log('encrypted password: ', joinedDataB64);
+
         */
+
+        setPassword(values.password)
 
         setMessage("");
         setLoading(true);
@@ -105,15 +111,6 @@ const Login = () => {
                                                 message: 'Please input your employee ID.',
 
                                             },
-                                            {
-                                                min: 8,
-                                                max: 8,
-                                                message: 'Employee ID should be exactly 8 digits.'
-                                            },
-                                            {
-                                                pattern: new RegExp(/^[0-9]+$/),
-                                                message: 'Employee ID should only contain digits.'
-                                            }
                                         ]}
                                     >
                                         <Input
@@ -123,7 +120,6 @@ const Login = () => {
                                             onChange={onChangeUsername}
                                         />
                                     </Form.Item>
-                                    <p>{errorUsername}</p>
                                 </div>
 
 
@@ -146,11 +142,6 @@ const Login = () => {
                                                 required: true,
                                                 message: 'Please input your password.',
                                             },
-                                            {
-                                                min: 8,
-                                                message: 'Password should be at least 8 characters.'
-
-                                            }
                                         ]}
                                     >
                                         <Input
