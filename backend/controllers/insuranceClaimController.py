@@ -24,9 +24,10 @@ def addClaim():
         
         db.session.add(claim)
         db.session.commit()
+
         return jsonify({
             "code": 200,
-            "token": access_token
+            "message": "Successfully Added a Claim!"
         })
 
     except Exception as e:
