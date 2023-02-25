@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Header from "./components/Header";
+import CreateClaim from "./components/CreateClaim";
 import AuthContextProvider from "./contexts/authContext";
 import Test from "./pages/Test.js"
 function App() {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/test" element={<Test />} />
+                    <Route path="/create" element={<CreateClaim/>} />
                 </Routes>
             </div>
         </AuthContextProvider>
