@@ -41,10 +41,10 @@ def login():
         if not existingUser:
             return jsonify(
                 {
-                    "code": 404,
+                    "code": 400,
                     "message": "User not found."
                 }
-            ), 404
+            ), 400
 
         additional_claims = {"id": existingUser.EmployeeID,
                             "name": existingUser.FirstName, "username": existingUser.EmployeeID}
