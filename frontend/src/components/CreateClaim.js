@@ -100,9 +100,9 @@ const CreateClaim = (props) => {
               ExpenseDate: expenseDate,
               Amount: amount,
               Purpose: purpose,
-              FollowUp: isFollowUp,
+              FollowUp: 0,
               PreviousClaimID: prevClaimId,
-              InsuranceID: insuranceId
+              InsuranceID: "1005"
             },
             headers:config.headers
           }).then(function (response) {

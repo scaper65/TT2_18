@@ -9,16 +9,7 @@ def getall():
     
     try:
         existingInsurancePolicies = InsurancePolicy.query.filter( (InsurancePolicy.EmployeeID == current_user) ).all(); 
-
-        if not existingInsurancePolicies:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "Policy not found."
-                }
-            ), 404
-
-        return list(map(lambda x: x.json(),existingInsurancePolicies)), 200
+        return list(map(lambda x: x.json(), existingInsurancePolicies)), 200
 
     except Exception as e:
         print(e)
