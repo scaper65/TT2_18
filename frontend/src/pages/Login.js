@@ -59,7 +59,7 @@ const Login = () => {
 
         auth.login(username, password).then(
             () => {
-                navigate("/homepage");
+                navigate("/");
                 // window.location.reload();
             },
             (error) => {

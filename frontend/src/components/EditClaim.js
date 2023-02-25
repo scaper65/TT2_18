@@ -4,7 +4,7 @@ import { Input, Modal, Checkbox, Select, Alert } from 'antd';
 import axios from "axios";
 import { useAuth } from "../contexts/authContext";
 import hosturl from "../hosturl.js"
-const ADD_API_URL = hosturl + "/insuranceclaim/add";
+const EDIT_API_URL = hosturl + "/insuranceclaim/edit/";
 const GET_CLAIM_API_URL = hosturl + "/insuranceclaim/getall";
 const GET_POLICY_API_URL = hosturl + "/insurancepolicy/getall";
 const GET_POLICY_BASED_ON_ID = hosturl + "/insuranceclaim/get/"
@@ -45,8 +45,8 @@ const CreateClaim = (props) => {
     }
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        props.record && fetchData();
+    }, [props.record]);
 
     const fetchData = () => {
         var config = {}
@@ -70,24 +70,34 @@ const CreateClaim = (props) => {
         //         let options = response.data.map((e) => { let s = { value: e.InsuranceID, label: e.InsuranceID }; return s })
         //         setInsuranceOptions(options)
         //     });
+    console.log(props)
 
-        axios({
-            method: 'get',
-            url: GET_CLAIM_API_URL + props.record.ClaimID,
-            responseType: 'json',
-            headers: config.headers
-        })
-            .then(response => {
-                const user = response.data
-                setFirstName(user.firstName)
-                setLastName(user.lastName)
-                setReceiptNo(user.receiptNo)
-                setExpenseDate(user.expenseDate)
-                setAmount(user.amount)
-                setPurpose(user.purpose)
-                setIsFollowUp(user.isFollowUp)
-                setInsuranceId(user.insuranceId)
-            })
+        setFirstName(props.record?.FirstName)
+        setLastName(props.record?.LastName)
+        setReceiptNo(props.record?.ReceiptNo)
+        setExpenseDate(props.record?.ExpenseDate)
+        setAmount(props.record?.Amount)
+        setPurpose(props.record?.Purpose)
+        setIsFollowUp(props.record?.IsFollowUp)
+        setInsuranceId(props.record?.InsuranceID)
+
+        // axios({
+        //     method: 'get',
+        //     url: GET_CLAIM_API_URL + props.record.ClaimID,
+        //     responseType: 'json',
+        //     headers: config.headers
+        // })
+        //     .then(response => {
+        //         const user = response.data
+        //         setFirstName(user.firstName)
+        //         setLastName(user.lastName)
+        //         setReceiptNo(user.receiptNo)
+        //         setExpenseDate(user.expenseDate)
+        //         setAmount(user.amount)
+        //         setPurpose(user.purpose)
+        //         setIsFollowUp(user.isFollowUp)
+        //         setInsuranceId(user.insuranceId)
+        //     })
     };
     // useEffect(() => {
     //     axios({
@@ -111,7 +121,7 @@ const CreateClaim = (props) => {
     const handleOk = (e) => {
         axios({
             method: 'put',
-            url: ADD_API_URL,
+            url: EDIT_API_URL,
             data: {
                 FirstName: firstName,
                 LastName: lastName,
@@ -121,11 +131,14 @@ const CreateClaim = (props) => {
                 Purpose: purpose,
                 FollowUp: isFollowUp,
                 PreviousClaimID: prevClaimId,
-                InsuranceID: insuranceId
+                InsuranceID: insuranceId,
+                claimId: props.record.ClaimID
             },
             headers: config.headers
         }).then(function (response) {
             console.log(response)
+            window.location.reload();
+            
             props.onCancel(e)
         }).catch(function (err) {
             console.log(err)
@@ -156,18 +169,19 @@ const CreateClaim = (props) => {
         <div>
             <Modal title="Basic Modal" open={props.isModalOpen} onOk={handleOk} onCancel={props.onCancel}>
                 {error ? <Alert message={error} type="error" /> : null}
-                <label for="prevClaimId">Previous Claim ID:</label>
-                <Select
+                <label for="insurancePolicy">Insurance Policy ID:</label>
+                <Input onChange={(e) => setInsuranceId(e.target.value)} value={insuranceId} id="insuranceId" />
+                {/* <Select
                     style={{ width: 120 }}
                     onChange={(e) => setInsuranceId(e)}
                     options={insuranceOptions}
-                />
+                /> */}
                 <label for="firstName">First Name:</label>
                 <Input onChange={(e) => setFirstName(e.target.value)} value={firstName} id="firstName" />
                 <label for="lastName">Last Name:</label>
                 <Input onChange={(e) => setLastName(e.target.value)} value={lastName} id="lastName" />
-                <label for="receiptNo">Receipt Number:</label>
-                <Input onChange={(e) => setReceiptNo(e.target.value)} value={receiptNo} id="receiptNo" />
+                {/* <label for="receiptNo">Receipt Number:</label>
+                <Input onChange={(e) => setReceiptNo(e.target.value)} value={receiptNo} id="receiptNo" /> */}
                 <label for="expenseDate">Expense Date:</label>
                 <Input onChange={(e) => setExpenseDate(e.target.value)} value={expenseDate} id="expenseDate" type="datetime-local" />
                 <label for="amount">Amount:</label>
@@ -179,11 +193,11 @@ const CreateClaim = (props) => {
                 {isFollowUp ?
                     <div>
                         <label for="prevClaimId">Previous Claim ID:</label>
-                        <Select
+                        {/* <Select
                             style={{ width: 120 }}
                             onChange={(e) => setPrevClaimId(e)}
                             options={prevClaimOptions}
-                        />
+                        /> */}
                         <Input onChange={(e) => setPrevClaimId(e.target.value)} value={prevClaimId} id="prevClaimId" />
                     </div>
                     : null}
