@@ -11,6 +11,8 @@ from routes.authRoute import authRoute;
 # <REMOVE THE WHEN USING THIS AS A TEMPLATE>---------------------------------------------------------
 
 from routes.userProtected import userRoute; 
+from routes.insurancePolicyRoute import insurancePolicyRoute; 
+from routes.insuranceClaimRoute import insuranceClaimRoute; 
 #-------------------------------------------------------------------
 
 application = app =  Flask(__name__)
@@ -42,6 +44,8 @@ application.register_blueprint(authRoute, url_prefix='/auth')
 # <REMOVE THE WHEN USING THIS AS A TEMPLATE>----------------------------------------------------------------------
 
 application.register_blueprint(userRoute, url_prefix='/user')
+application.register_blueprint(insurancePolicyRoute, url_prefix='/insurancepolicy')
+application.register_blueprint(insuranceClaimRoute, url_prefix='/insuranceclaim')
 #---------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
