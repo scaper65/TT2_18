@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from controllers.insuranceClaimsController import *; 
+from controllers.insuranceClaimController import *; 
 
 insuranceClaimsRoute = Blueprint('insuranceClaim', __name__); 
 
