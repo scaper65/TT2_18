@@ -1,7 +1,7 @@
 from flask import *; 
 from flask_jwt_extended import *; 
 from models.db_models import *
-
+from datetime import datetime,time;
 from utils.dbConfig import db
 
 
@@ -52,9 +52,20 @@ def get(claimId):
 
 @jwt_required()
 
-def editClaim(claimId):
+def editClaim():
     
     try:
+        claimId = request.json.get("claimId", None)
+
+        claim = InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).first()
+        if not claim:
+             return jsonify(
+                {
+                    "code": 404,
+                    "message": "Claim not found."
+                }
+            ), 404
+        
         firstName = request.json.get("FirstName", None)
         lastName = request.json.get("LastName", None)
 
@@ -67,16 +78,16 @@ def editClaim(claimId):
 
         previousClaimID = request.json.get("Purpose", None)
        
-        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
+    
         
-        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update()
+        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update({'FirstName':firstName,'LastName':lastName,'ExpenseDate':expenseDate,'Amount':amount,'Purpose':purpose,'FollowUp':followUp,'PreviousClaimID':previousClaimID})
 
-        db.session.add(claim)
+    
         db.session.commit()
 
         return jsonify({
             "code": 200,
-            "message": "Successfully Added a Claim!"
+            "message": "Successfully updated a Claim!"
         })
 
     except Exception as e:
@@ -89,29 +100,47 @@ def editClaim(claimId):
         ), 500
 
 @jwt_required()
+
 def addClaim():
     try:
-        firstName = request.json.get("FirstName", None)
-        lastName = request.json.get("LastName", None)
-
-        expenseDate = request.json.get("ExpenseDate", None)
-        amount = request.json.get("Amount", None)
-
         
-        purpose = request.json.get("Purpose", None)
-        followUp = request.json.get("FollowUp", None)
-
-        previousClaimID = request.json.get("PreviousClaimID", None)
+        insuranceid = request.json.get("InsuranceID", None)
+        #check valid policy
+        policy = InsurancePolicy.query.filter(InsurancePolicy.InsuranceID == insuranceid).first()
        
-        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
+        #check if existing claim id 
+        if not policy:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Policy not found."
+                }
+            ), 404
         
-        db.session.add(claim)
-        db.session.commit()
+        else:
 
-        return jsonify({
-            "code": 200,
-            "message": "Successfully Added a Claim!"
-        })
+            firstName = request.json.get("FirstName", None)
+            lastName = request.json.get("LastName", None)
+
+            expenseDate = request.json.get("ExpenseDate", None)
+            amount = request.json.get("Amount", None)
+
+            
+            purpose = request.json.get("Purpose", None)
+            followUp = request.json.get("FollowUp", None)
+
+            previousClaimID = request.json.get("PreviousClaimID", None)
+            now = datetime.now()    
+            now = now.strftime('%Y-%m-%d %H:%M:%S')
+            claim = InsuranceClaim(InsuranceID = policy.InsuranceID , FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID,Status="Pending",LastEditedClaimDate = str(now))
+            
+            db.session.add(claim)
+            db.session.commit()
+
+            return jsonify({
+                "code": 200,
+                "message": "Successfully Added a Claim!"
+            })
 
     except Exception as e:
         print(e)
@@ -122,7 +151,9 @@ def addClaim():
             }
         ), 500
 
+
 @jwt_required()
+
 def deleteClaim(claimId):
 
     try:

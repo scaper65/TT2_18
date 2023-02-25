@@ -3,6 +3,7 @@ from utils.dbConfig import db
 from models.db_models import User
 from flask_jwt_extended import create_access_token
 import json
+from utils.passwordUtility import *
 
 
 def login():
@@ -36,13 +37,13 @@ def login():
         username = request.json.get("username", None)
         password = request.json.get("password", None)
 
-        existingUser = User.query.filter( (User.EmployeeID == username) & (User.Password == password) ).first(); 
+        existingUser = User.query.filter( (User.EmployeeID == username) ).first(); 
 
-        if not existingUser:
+        if not existingUser or not verifyPassword(password.encode('utf-8'), existingUser.Password.encode('utf-8')):
             return jsonify(
                 {
                     "code": 400,
-                    "message": "User not found."
+                    "message": "Invalid credentials"
                 }
             ), 400
 
