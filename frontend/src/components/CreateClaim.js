@@ -9,6 +9,7 @@ const GET_CLAIM_API_URL = hosturl+"/insuranceclaim/getall";
 const GET_POLICY_API_URL = hosturl+"/insurancepolicy/getall";
 
 
+
 const CreateClaim = (props) => {
     const auth = useAuth()
     // let navigate = useNavigate();
@@ -17,8 +18,8 @@ const CreateClaim = (props) => {
     const [receiptNo, setReceiptNo] = useState("");
     const [expenseDate, setExpenseDate] = useState("");
     const [amount, setAmount] = useState("");
-    const [purpose, setPurpose] = useState("");
-    const [isFollowUp, setIsFollowUp] = useState("");
+    const [purpose, setPurpose] = useState("")
+    const [isFollowUp, setIsFollowUp] = useState(false);
     const [prevClaimId, setPrevClaimId] = useState("");
     const [insuranceId, setInsuranceId] = useState("");
     const [insuranceOptions, setInsuranceOptions] = useState([]);
@@ -89,6 +90,7 @@ const CreateClaim = (props) => {
     const [prevClaimOptions,setPrevClaimOptions] = useState(options);
 
 
+
     const handleOk = (e) => {
         axios({
             method: 'post',
@@ -100,9 +102,9 @@ const CreateClaim = (props) => {
               ExpenseDate: expenseDate,
               Amount: amount,
               Purpose: purpose,
-              FollowUp: 0,
+              FollowUp: isFollowUp,
               PreviousClaimID: prevClaimId,
-              InsuranceID: "1005"
+              InsuranceID: insuranceId
             },
             headers:config.headers
           }).then(function (response) {
@@ -137,12 +139,13 @@ const CreateClaim = (props) => {
         <div>
             <Modal title="Basic Modal" open={props.isModalOpen} onOk={handleOk} onCancel={props.onCancel}>
                 {error ? <Alert message={error} type="error" /> : null}
-                <label for="prevClaimId">Previous Claim ID:</label>
+                <label for="prevClaimId">Insurance ID:</label>
                 <Select
                     style={{ width: 120 }}
                     onChange={(e) => setInsuranceId(e)}
                     options={insuranceOptions}
                 />
+                <Input onChange={(e) => setInsuranceId(e.target.value)} value={insuranceId} id="firstName"/>
                 <label for="firstName">First Name:</label>
                 <Input onChange={(e) => setFirstName(e.target.value)} value={firstName} id="firstName"/>
                 <label for="lastName">Last Name:</label>
