@@ -14,7 +14,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const secretPass = "XkhZG4fW2t2W";
+    const secretPass = "1etILrVdx5rCiqzNJfDDV8f3sGsaYwOq";
 
     const onChangeUsername = (e) => {
         const username = e.target.value;
@@ -30,14 +30,29 @@ const Login = () => {
 
         // e.preventDefault();
         setUsername(values.username)
+/*
+        const password = values.password;
+        const iv = CryptoJS.lib.WordArray.random(16);                         // Generate a random 16 bytes IV
+        console.log('iv: ', iv);
+        const key = CryptoJS.enc.Base64.parse('aR1h7EefwlPNVkvTHwfs6w==');    // Interpret key as Base64 encoded
+        console.log('key: ', key );
 
-        const encryptedPassword = CryptoJS.AES.encrypt(
-            JSON.stringify(values.password),
-            secretPass
-        ).toString();
+        const encrypted = CryptoJS.AES.encrypt(password, key, { iv: iv });      // Use CBC-mode and PKCS7-padding
+        const joinedData = iv.clone().concat(encrypted.ciphertext);           // Concat IV and Ciphertext    
+        const joinedDataB64 = CryptoJS.enc.Base64.stringify(joinedData);
+        console.log(joinedDataB64.replace(/(.{64})/g, "$1\n"));
 
-        setPassword(encryptedPassword)
-        console.log('encrypted password: ', encryptedPassword);
+        // const encryptedPassword = CryptoJS.enc.Utf8.parse(
+        //     JSON.stringify(values.password),
+        //     secretPass
+        // ).toString();
+
+        setPassword(joinedDataB64)
+        console.log('encrypted password: ', joinedDataB64);
+
+        */
+
+        setPassword(values.password)
 
         setMessage("");
         setLoading(true);
