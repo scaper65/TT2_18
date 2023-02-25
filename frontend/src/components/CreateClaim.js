@@ -109,6 +109,7 @@ const CreateClaim = (props) => {
             headers:config.headers
           }).then(function (response) {
             console.log(response)
+            window.location.reload();
             props.onCancel(e)
           }).catch(function (err) {
             console.log(err)
@@ -140,11 +141,11 @@ const CreateClaim = (props) => {
             <Modal title="Basic Modal" open={props.isModalOpen} onOk={handleOk} onCancel={props.onCancel}>
                 {error ? <Alert message={error} type="error" /> : null}
                 <label for="prevClaimId">Insurance ID:</label>
-                <Select
+                {/* <Select
                     style={{ width: 120 }}
                     onChange={(e) => setInsuranceId(e)}
                     options={insuranceOptions}
-                />
+                /> */}
                 <Input onChange={(e) => setInsuranceId(e.target.value)} value={insuranceId} id="firstName"/>
                 <label for="firstName">First Name:</label>
                 <Input onChange={(e) => setFirstName(e.target.value)} value={firstName} id="firstName"/>
@@ -163,11 +164,11 @@ const CreateClaim = (props) => {
                 {isFollowUp ? 
                     <div>
                         <label for="prevClaimId">Previous Claim ID:</label>
-                        <Select
+                        {/* <Select
                             style={{ width: 120 }}
                             onChange={(e) => setPrevClaimId(e)}
                             options={prevClaimOptions}
-                        />
+                        /> */}
                         <Input onChange={(e) => setPrevClaimId(e.target.value)} value={prevClaimId} id="prevClaimId"/>
                     </div> 
                 : null}

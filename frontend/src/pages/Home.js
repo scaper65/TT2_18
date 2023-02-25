@@ -42,13 +42,13 @@ const Home = () => {
     return (
         <>
             <div className="container">
-                {/* <FloatButton
+                <FloatButton
                     shape="circle"
                     type="primary"
                     style={{ right: 94 }}
                     // icon={<CustomerServiceOutlined />}
                     onClick = {() => setIsModalOpen(true)}
-                /> */}
+                />
                 <CreateClaim isModalOpen={isModalOpen} onCancel={() => setIsModalOpen(false)}/>
                 
 
