@@ -8,5 +8,5 @@ insuranceClaimRoute = Blueprint('insuranceClaim', __name__);
 insuranceClaimRoute.route('/getall', strict_slashes=False,
                 methods=['GET'])(getall)
 
-insuranceClaimRoute.route('/get<claimId>', strict_slashes=False,
+insuranceClaimRoute.route('/get/<claimId>', strict_slashes=False,
                 methods=['GET'])(get)

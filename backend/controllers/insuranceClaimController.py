@@ -1,6 +1,6 @@
 from flask import *; 
 from flask_jwt_extended import *; 
-from models.db_models import InsuranceClaim
+from models.db_models import InsuranceClaim, InsurancePolicy
 from utils.dbConfig import db
 
 @jwt_required()
@@ -9,8 +9,8 @@ def getall():
     current_user = get_jwt_identity()
     
     try:
-        existingInsuranceClaims = InsuranceClaim.query.filter( (InsuranceClaim.EmployeeID == current_user) ).all(); 
-        return list(map(lambda x: x.json(), existingInsuranceClaims)), 200
+        existingInsuranceClaims = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID)).all(); 
+        return list(map(lambda x: x.InsuranceClaim.json(), existingInsuranceClaims)), 200
 
     except Exception as e:
         print(e)
@@ -27,8 +27,17 @@ def get(claimId):
     current_user = get_jwt_identity()
     
     try:
-        existingInsuranceClaim = InsuranceClaim.query.filter( (InsuranceClaim.EmployeeID == current_user) &  (InsuranceClaim.ClaimID == claimId)).first(); 
-        return existingInsuranceClaim.json(), 200
+        existingInsuranceClaim = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID) & (InsuranceClaim.ClaimID == claimId)).first(); 
+        
+        if not existingInsuranceClaim:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Claim not found."
+                }
+            ), 404
+
+        return existingInsuranceClaim.InsuranceClaim.json(), 200
 
     except Exception as e:
         print(e)
