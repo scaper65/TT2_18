@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DbsLogo from "../assets/DBS-Bank-logo.png";
 import { useAuth } from "../contexts/authContext";
 import { Button, Space, Input, Form } from 'antd';
+import CryptoJS from 'crypto-js';
 
 const Login = () => {
     let navigate = useNavigate();
@@ -12,8 +13,8 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-    const [errorUsername, setErrorUsername] = useState("")
-    const [errorPassword, setErrorPassword] = useState("")
+
+    const secretPass = "XkhZG4fW2t2W";
 
     const onChangeUsername = (e) => {
         const username = e.target.value;
@@ -22,31 +23,21 @@ const Login = () => {
 
     const onChangePassword = (e) => {
         const password = e.target.value;
-        console.log('password: ', password);
-
         setPassword(password);
     };
 
     const handleLogin = (values) => {
 
         // e.preventDefault();
-        console.log(values);
         setUsername(values.username)
+
+        const encryptedPassword = CryptoJS.AES.encrypt(
+            JSON.stringify(values.password),
+            secretPass
+        ).toString();
+
         setPassword(values.password)
-
-        /*
-        if (!isNaN(username)) {
-            alert('Username should be all digits.')
-        }
-
-        if (username.length != 8 && password.length != 8) {
-            alert(`Username should be 8 characters. Password should be at least 8 characters.`)
-        } else if (username.length != 8) {
-            alert('Username should be 8 characters and should be all digits.')
-        } else if (password.length != 8) {
-            alert('Password should be 8 characters.')
-        }
-        */
+        console.log('encrypted password: ', encryptedPassword);
 
         setMessage("");
         setLoading(true);
@@ -105,15 +96,6 @@ const Login = () => {
                                                 message: 'Please input your employee ID.',
 
                                             },
-                                            {
-                                                min: 8,
-                                                max: 8,
-                                                message: 'Employee ID should be exactly 8 digits.'
-                                            },
-                                            {
-                                                pattern: new RegExp(/^[0-9]+$/),
-                                                message: 'Employee ID should only contain digits.'
-                                            }
                                         ]}
                                     >
                                         <Input
@@ -123,7 +105,6 @@ const Login = () => {
                                             onChange={onChangeUsername}
                                         />
                                     </Form.Item>
-                                    <p>{errorUsername}</p>
                                 </div>
 
 
@@ -146,11 +127,6 @@ const Login = () => {
                                                 required: true,
                                                 message: 'Please input your password.',
                                             },
-                                            {
-                                                min: 8,
-                                                message: 'Password should be at least 8 characters.'
-
-                                            }
                                         ]}
                                     >
                                         <Input
