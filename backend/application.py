@@ -12,7 +12,7 @@ from routes.authRoute import authRoute;
 
 from routes.userProtected import userRoute; 
 from routes.insurancePolicyRoute import insurancePolicyRoute; 
-from routes.insuranceClaimsRoute import insuranceClaimsRoute; 
+from routes.insuranceClaimRoute import insuranceClaimRoute; 
 #-------------------------------------------------------------------
 
 application = app =  Flask(__name__)
