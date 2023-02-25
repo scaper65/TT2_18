@@ -1,7 +1,7 @@
 from flask import *; 
 from flask_jwt_extended import *; 
 from models.db_models import *
-from datetime import datetime;
+from datetime import datetime,time;
 from utils.dbConfig import db
 
 
@@ -92,14 +92,17 @@ def editClaim(claimId):
 
 def addClaim():
     try:
-
-        existingInsuranceClaim = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID) & (InsuranceClaim.ClaimID == claimId)).first(); 
+        
+        insuranceid = request.json.get("InsuranceId", None)
+        #check valid policy
+        policy = InsurancePolicy.query.filter(InsurancePolicy.InsuranceID == insuranceid).first()
        
-        if not existingInsuranceClaim:
+        #check if existing claim id 
+        if not policy:
             return jsonify(
                 {
                     "code": 404,
-                    "message": "Claim not found."
+                    "message": "Policy not found."
                 }
             ), 404
         
@@ -116,8 +119,9 @@ def addClaim():
             followUp = request.json.get("FollowUp", None)
 
             previousClaimID = request.json.get("PreviousClaimID", None)
-        
-            claim = InsuranceClaim(InsuranceID = existingInsuranceClaim.InsuranceID , FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID,Status="Pending",LastEditedClaimDate = datetime.now())
+            now = datetime.now()    
+            now = now.strftime('%Y-%m-%d %H:%M:%S')
+            claim = InsuranceClaim(InsuranceID = policy.InsuranceID , FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID,Status="Pending",LastEditedClaimDate = str(now))
             
             db.session.add(claim)
             db.session.commit()
