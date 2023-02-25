@@ -36,7 +36,7 @@ const Login = () => {
             secretPass
         ).toString();
 
-        setPassword(values.password)
+        setPassword(encryptedPassword)
         console.log('encrypted password: ', encryptedPassword);
 
         setMessage("");
