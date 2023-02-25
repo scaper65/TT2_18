@@ -36,7 +36,7 @@ def login():
         username = request.json.get("username", None)
         password = request.json.get("password", None)
 
-        existingUser = User.query.filter( (User.username == username) & (User.password == password) ).first(); 
+        existingUser = User.query.filter( (User.EmployeeID == username) & (User.Password == password) ).first(); 
 
         if not existingUser:
             return jsonify(
@@ -46,11 +46,11 @@ def login():
                 }
             ), 404
 
-        additional_claims = {"id": existingUser.id,
-                            "name": existingUser.name, "username": existingUser.username}
+        additional_claims = {"id": existingUser.EmployeeID,
+                            "name": existingUser.FirstName, "username": existingUser.EmployeeID}
 
         access_token = create_access_token(
-            identity=existingUser.id, additional_claims=additional_claims)
+            identity=existingUser.EmployeeID, additional_claims=additional_claims)
 
         return jsonify({
             "code": 200,

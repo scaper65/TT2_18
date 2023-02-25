@@ -12,7 +12,7 @@ class InsuranceClaim(db.Model):
     ExpenseDate = db.Column(db.String(255), nullable=False)
     Amount = db.Column(db.Float, nullable=False)
     Purpose = db.Column(db.String(255), nullable=False)
-    FollowUp = db.Column(db.BIT(1), nullable=False)
+    ##FollowUp = db.Column(db.BIT(1), nullable=False)
     PreviousClaimID = db.Column(db.Integer)
     Status = db.Column(db.String(20), nullable=False)
     LastEditedClaimDate = db.Column(db.String(255), nullable=False)
