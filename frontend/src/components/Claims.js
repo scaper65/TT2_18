@@ -1,20 +1,30 @@
 import React from 'react';
+import { useState } from 'react';
 import { Table, Button } from 'antd'
+import axios from "axios"; 
+import { useAuth } from "../contexts/authContext"; 
+import hosturl from "../hosturl.js" 
+import { useEffect } from 'react';
+const API_URL = hosturl + "/insuranceClaim/delete/";
 
 const Claims = (props) => {
-    const handleDelete = (record) => {
-        // Create a new array of claims excluding the one to be deleted
-        const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID);
-        // Call a function to update the claims in your app state or database
-        updateClaims(updatedClaims);
-        console.log('Delete claim:', record);
-    };
+    const auth = useAuth(); 
 
-    const updateClaims = (updatedClaims) => {
-        // Update the claims in your app state or database
-        // This is just an example and will depend on how you're managing state
-        props.setClaims(updatedClaims);
-    }
+    const [ claims, setClaims ] = useState(props.claims);
+
+
+    const handleDelete = (record) => { 
+        // Create a new array of claims excluding the one to be deleted 
+        const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID); 
+        // Call a function to update the claims in your app state or database 
+
+        axios({ 
+            method: 'delete', 
+            url: API_URL+record.ClaimID}); 
+        setClaims(updatedClaims);
+        console.log(claims)
+        console.log('Delete claim:', record); 
+    };
 
     const columns = [
         {
@@ -94,7 +104,7 @@ const Claims = (props) => {
 
 
     return (
-        <Table columns={columns} dataSource={props.claims} rowKey="ClaimID" />
+        <Table columns={columns} dataSource={claims} rowKey="ClaimID"/>
     );
 };
 
