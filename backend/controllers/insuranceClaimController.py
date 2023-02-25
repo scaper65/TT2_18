@@ -93,7 +93,7 @@ def editClaim(claimId):
 def addClaim():
     try:
         
-        insuranceid = request.json.get("InsuranceId", None)
+        insuranceid = request.json.get("InsuranceID", None)
         #check valid policy
         policy = InsurancePolicy.query.filter(InsurancePolicy.InsuranceID == insuranceid).first()
        
