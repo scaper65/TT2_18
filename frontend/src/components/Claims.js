@@ -1,18 +1,17 @@
 import React from 'react';
+import { useState } from 'react';
 import { Table, Button } from 'antd'
+import axios from "axios"; 
+import { useAuth } from "../contexts/authContext"; 
+import hosturl from "../hosturl.js" 
+import { useEffect } from 'react';
+import EditClaim from "./EditClaim";
+const API_URL = hosturl + "/insuranceClaim/";
 
 const Claims = (props) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [record, setRecord] = useState({});
-
-    const handleDelete = (record) => {
-        // Create a new array of claims excluding the one to be deleted
-        const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID);
-        // Call a function to update the claims in your app state or database
-        updateClaims(updatedClaims);
-        console.log('Delete claim:', record);
-    };
-
+    
     const handleEdit = (record) => {
         setRecord(record);
         setIsEditModalOpen(true);
@@ -23,6 +22,23 @@ const Claims = (props) => {
         // This is just an example and will depend on how you're managing state
         props.setClaims(updatedClaims);
     }
+    const auth = useAuth(); 
+
+    const [ claims, setClaims ] = useState(props.claims);
+
+
+    const handleDelete = (record) => { 
+        // Create a new array of claims excluding the one to be deleted 
+        const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID); 
+        // Call a function to update the claims in your app state or database 
+
+        axios({ 
+            method: 'DELETE', 
+            url: API_URL+record.ClaimID}); 
+        setClaims(updatedClaims);
+        console.log(claims)
+        console.log('Delete claim:', record); 
+    };
 
     const columns = [
         {
@@ -102,10 +118,10 @@ const Claims = (props) => {
 
 
     return (
-        <>
+        <div style={{ marginTop: '50px' }}>
             <Table columns={columns} dataSource={props.claims} rowKey="ClaimID" />
             <EditClaim isModalOpen={isEditModalOpen} onCancel={() => setIsEditModalOpen(false)} record={record} />        
-        </>
+        </div>
     );
 };
 
