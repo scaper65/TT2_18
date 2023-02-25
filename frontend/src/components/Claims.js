@@ -77,12 +77,16 @@ const Claims = (props) => {
             key: 'actions',
             render: (text, record) => (
                 <>
-                    <Button type="primary">
-                        Edit
-                    </Button>
-                    <Button type="danger" onClick={() => handleDelete(record)}>
-                        Delete
-                    </Button>
+                    {record.Status !== "Approved" ? (
+                        <Button type="primary">
+                            Edit
+                        </Button>
+                    ) : null}
+                    {record.Status !== "Approved" ? (
+                        <Button type="danger" onClick={() => handleDelete(record)}>
+                            Delete
+                        </Button>
+                    ) : null}
                 </>
             ),
         },
