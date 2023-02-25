@@ -52,9 +52,20 @@ def get(claimId):
 
 @jwt_required()
 
-def editClaim(claimId):
+def editClaim():
     
     try:
+        claimId = request.json.get("claimId", None)
+
+        claim = InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).first()
+        if not claim:
+             return jsonify(
+                {
+                    "code": 404,
+                    "message": "Claim not found."
+                }
+            ), 404
+        
         firstName = request.json.get("FirstName", None)
         lastName = request.json.get("LastName", None)
 
@@ -67,16 +78,16 @@ def editClaim(claimId):
 
         previousClaimID = request.json.get("Purpose", None)
        
-        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
+    
         
-        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update()
+        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update({'FirstName':firstName,'LastName':lastName,'ExpenseDate':expenseDate,'Amount':amount,'Purpose':purpose,'FollowUp':followUp,'PreviousClaimID':previousClaimID})
 
-        db.session.add(claim)
+    
         db.session.commit()
 
         return jsonify({
             "code": 200,
-            "message": "Successfully Added a Claim!"
+            "message": "Successfully updated a Claim!"
         })
 
     except Exception as e:
