@@ -11,7 +11,7 @@ def getall():
     current_user = get_jwt_identity()
     
     try:
-        existingInsuranceClaims = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID)).all(); 
+        existingInsuranceClaims = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID)).order_by(InsuranceClaim.ClaimID).all(); 
         return list(map(lambda x: x.InsuranceClaim.json(), existingInsuranceClaims)), 200
 
     except Exception as e:
