@@ -24,7 +24,6 @@ def addClaim():
         
         db.session.add(claim)
         db.session.commit()
-        
         return jsonify({
             "code": 200,
             "token": access_token
@@ -44,7 +43,7 @@ def deleteClaim(claimId):
 
     try:
         
-        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == ClaimID).delete()
+        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).delete()
       
         db.session.commit()
 
