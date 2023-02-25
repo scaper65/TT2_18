@@ -1,8 +1,14 @@
 import React, { useState }  from "react";
 import { useNavigate } from "react-router-dom";
 import { Input, Modal, Checkbox } from 'antd';
+import axios from "axios";
+import { useAuth } from "../contexts/authContext";
+import hosturl from "../hosturl.js"
+const API_URL = hosturl+"/insuranceClaim/add";
 
-const CreateClaim = () => {
+
+const CreateClaim = (props) => {
+    const auth = useAuth()
     // let navigate = useNavigate();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -12,20 +18,33 @@ const CreateClaim = () => {
     const [purpose, setPurpose] = useState("");
     const [isFollowUp, setIsFollowUp] = useState("");
     const [prevClaimId, setprevClaimId] = useState("");
-    console.log(isFollowUp)
+    // console.log(isFollowUp)
 
     const handleCancel = (e) => {
         return
     }
 
     const handleOk = (e) => {
-        return
+        axios({
+            method: 'post',
+            url: API_URL,
+            data: {
+              FirstName: firstName,
+              LastName: lastName,
+              receiptNo: receiptNo,
+              ExpenseDate: expenseDate,
+              Amount: amount,
+              Purpose: purpose,
+              FollowUp: isFollowUp,
+              PreviousClaimID: prevClaimId,
+            }
+          });
     }
     
 
     return (
         <div>
-            <Modal title="Basic Modal" open={true} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Basic Modal" open={props.isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <label for="firstName">First Name:</label>
                 <Input onChange={(e) => setFirstName(e.target.value)} value={firstName} id="firstName"/>
                 <label for="lastName">Last Name:</label>
