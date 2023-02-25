@@ -5,22 +5,62 @@ from utils.dbConfig import db
 
 @jwt_required()
 
+<<<<<<< Updated upstream
 
-def addClaim():
+=======
+def editClaim(claimId):
+    
     try:
-        FirstName = request.json.get("FirstName", None)
-        LastName = request.json.get("LastName", None)
+        firstName = request.json.get("FirstName", None)
+        lastName = request.json.get("LastName", None)
 
-        ExpenseDate = request.json.get("ExpenseDate", None)
-        Amount = request.json.get("Amount", None)
+        expenseDate = request.json.get("ExpenseDate", None)
+        amount = request.json.get("Amount", None)
 
         
-        Purpose = request.json.get("Purpose", None)
-        FollowUp = request.json.get("FollowUp", None)
+        purpose = request.json.get("Purpose", None)
+        followUp = request.json.get("FollowUp", None)
 
-        PreviousClaimID = request.json.get("Purpose", None)
+        previousClaimID = request.json.get("Purpose", None)
        
-        claim = InsuranceClaim(FirstName=FirstName,LastName=LastName,ExpenseDate=ExpenseDate,Amount=Amount,FirstName=FirstName,Purpose=Purpose,FollowUp=FollowUp,PreviousClaimID=PreviousClaimID)
+        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
+        
+        InsuranceClaim.query.filter(InsuranceClaim.ClaimID == claimId).update()
+
+        db.session.add(claim)
+        db.session.commit()
+
+        return jsonify({
+            "code": 200,
+            "message": "Successfully Added a Claim!"
+        })
+
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Server Error"
+            }
+        ), 500
+
+@jwt_required()
+>>>>>>> Stashed changes
+def addClaim():
+    try:
+        firstName = request.json.get("FirstName", None)
+        lastName = request.json.get("LastName", None)
+
+        expenseDate = request.json.get("ExpenseDate", None)
+        amount = request.json.get("Amount", None)
+
+        
+        purpose = request.json.get("Purpose", None)
+        followUp = request.json.get("FollowUp", None)
+
+        previousClaimID = request.json.get("PreviousClaimID", None)
+       
+        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
         
         db.session.add(claim)
         db.session.commit()
