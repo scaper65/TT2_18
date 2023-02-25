@@ -45,14 +45,6 @@ def login():
                     "code": 400,
                     "message": "Invalid credentials"
                 }
-            ), 404
-
-        if not existingUser:
-            return jsonify(
-                {
-                    "code": 400,
-                    "message": "Invalid credentials"
-                }
             ), 400
 
         additional_claims = {"id": existingUser.EmployeeID,
