@@ -1,7 +1,7 @@
 from flask import *; 
 from flask_jwt_extended import *; 
 from models.db_models import *
-
+from datetime import datetime;
 from utils.dbConfig import db
 
 
@@ -89,29 +89,43 @@ def editClaim(claimId):
         ), 500
 
 @jwt_required()
+
 def addClaim():
     try:
-        firstName = request.json.get("FirstName", None)
-        lastName = request.json.get("LastName", None)
 
-        expenseDate = request.json.get("ExpenseDate", None)
-        amount = request.json.get("Amount", None)
-
-        
-        purpose = request.json.get("Purpose", None)
-        followUp = request.json.get("FollowUp", None)
-
-        previousClaimID = request.json.get("PreviousClaimID", None)
+        existingInsuranceClaim = db.session.query(InsuranceClaim, InsurancePolicy).filter((InsurancePolicy.EmployeeID == current_user) & (InsurancePolicy.InsuranceID == InsuranceClaim.InsuranceID) & (InsuranceClaim.ClaimID == claimId)).first(); 
        
-        claim = InsuranceClaim(FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID)
+        if not existingInsuranceClaim:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Claim not found."
+                }
+            ), 404
         
-        db.session.add(claim)
-        db.session.commit()
+        else:
 
-        return jsonify({
-            "code": 200,
-            "message": "Successfully Added a Claim!"
-        })
+            firstName = request.json.get("FirstName", None)
+            lastName = request.json.get("LastName", None)
+
+            expenseDate = request.json.get("ExpenseDate", None)
+            amount = request.json.get("Amount", None)
+
+            
+            purpose = request.json.get("Purpose", None)
+            followUp = request.json.get("FollowUp", None)
+
+            previousClaimID = request.json.get("PreviousClaimID", None)
+        
+            claim = InsuranceClaim(InsuranceID = existingInsuranceClaim.InsuranceID , FirstName=firstName,LastName=lastName,ExpenseDate=expenseDate,Amount=amount,Purpose=purpose,FollowUp=followUp,PreviousClaimID=previousClaimID,Status="Pending",LastEditedClaimDate = datetime.now())
+            
+            db.session.add(claim)
+            db.session.commit()
+
+            return jsonify({
+                "code": 200,
+                "message": "Successfully Added a Claim!"
+            })
 
     except Exception as e:
         print(e)
@@ -122,7 +136,9 @@ def addClaim():
             }
         ), 500
 
+
 @jwt_required()
+
 def deleteClaim(claimId):
 
     try:
