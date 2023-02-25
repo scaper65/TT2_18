@@ -18,7 +18,10 @@ class InsuranceClaim(db.Model):
     LastEditedClaimDate = db.Column(db.String(255), nullable=False)
 
     InsurancePolicy = db.relationship('InsurancePolicy', primaryjoin='InsuranceClaim.InsuranceID == InsurancePolicy.InsuranceID', backref='insurance_claims')
-
+    def json(self):
+        return {"ClaimID": self.ClaimID, "InsuranceID": self.InsuranceID, "FirstName": self.FirstName, "LastName": self.LastName
+        , "ExpenseDate": self.ExpenseDate, "Amount": self.Amount, "Purpose": self.Purpose
+        , "FollowUp": self.FollowUp, "PreviousClaimID": self.PreviousClaimID, "Status": self.Status, "LastEditedClaimDate": self.LastEditedClaimDate}
 
 
 class InsurancePolicy(db.Model):
