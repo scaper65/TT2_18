@@ -9,20 +9,20 @@ const API_URL = hosturl + "/insuranceClaim/delete/";
 
 const Claims = (props) => {
     const auth = useAuth(); 
-
     const [ claims, setClaims ] = useState(props.claims);
-
+    useEffect(() => { 
+        setClaims(props.claims); 
+      }, [props.claims]);
 
     const handleDelete = (record) => { 
         // Create a new array of claims excluding the one to be deleted 
-        const updatedClaims = props.claims.filter(claim => claim.ClaimID !== record.ClaimID); 
+        const updatedClaims = claims.filter(claim => claim.ClaimID !== record.ClaimID); 
         // Call a function to update the claims in your app state or database 
 
         axios({ 
             method: 'delete', 
             url: API_URL+record.ClaimID}); 
         setClaims(updatedClaims);
-        console.log(claims)
         console.log('Delete claim:', record); 
     };
 

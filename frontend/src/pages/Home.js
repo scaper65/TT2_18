@@ -27,7 +27,6 @@ const Home = () => {
     }, [auth.user])
 
     const allClaims = () => {
-        console.log(API_URL + 'getall');
         axios.get(API_URL + 'getall', config)
         .then((response) => {
             setClaims(response.data);
