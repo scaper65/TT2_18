@@ -4,6 +4,8 @@ import axios from "axios";
 import hosturl from "../hosturl.js"
 import { useAuth } from "../contexts/authContext.js";
 import Claims from '../components/Claims';
+
+const API_URL = hosturl+'/insuranceclaim/';
 const Home = () => {
     const auth = useAuth(); 
       // get request
@@ -282,9 +284,21 @@ const Home = () => {
         }
     ]
 
+    const allClaims = () => {
+        console.log(API_URL + 'getall');
+        axios({
+            method: 'get',
+            url: API_URL + 'getall',
+            responseType: 'stream'
+          })
+            .then(function (response) {
+                console.log(response.data);
+            });
+    }
+
     return (
         <>
-            <div className="container">
+            {/* <div className="container">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card card-container">
@@ -297,10 +311,9 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <Claims claims={claims} />
-            </div>
+                <Claims claims={allClaims()} />
         </>
         
     );
